@@ -1,6 +1,7 @@
 package com.example.microservicio_residuos.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,30 @@ public class ResiduoService {
         return residuoRepository.findAll();
     }
 
-    public List<Residuo> buscarPorId(Integer idBuscar) {
-        return residuoRepository.buscarPorId(idBuscar);
-    }
-
-    public void eliminarPorId(Integer id) {
-        residuoRepository.eliminarPorId(id);
+    public void eliminarPorId(Long id) {
+        residuoRepository.deleteById(id);
     }
 
     public void guardar(Residuo nuevoResiduo) {
         residuoRepository.save(nuevoResiduo);
     }
 
-    public List<Residuo> findById(Integer id) {
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    public Optional<Residuo> findById(Long id) {
+        return residuoRepository.findById(id);
+    }
+
+    public void actualizar(Long id, Residuo datosActualizados) {
+        Optional<Residuo> existenteOpt = residuoRepository.findById(id);
+        if (existenteOpt.isPresent()) {
+            Residuo existente = existenteOpt.get();
+            existente.setTipo(datosActualizados.getTipo());
+            existente.setPeso(datosActualizados.getPeso());
+            existente.setPeligrosidad(datosActualizados.getPeligrosidad());
+            existente.setEmpresaEmisora(datosActualizados.getEmpresaEmisora());
+            existente.setVolumen(datosActualizados.getVolumen());
+            existente.setClasificacion(datosActualizados.getClasificacion());
+            existente.setNombre(datosActualizados.getNombre());
+            residuoRepository.save(existente);
+        }
     }
 }

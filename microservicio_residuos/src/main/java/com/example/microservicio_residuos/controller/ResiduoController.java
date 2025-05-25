@@ -1,6 +1,7 @@
 package com.example.microservicio_residuos.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 @RestController
 @RequestMapping("/api/residuos/v1")
 public class ResiduoController {
@@ -30,20 +33,18 @@ public class ResiduoController {
         }
         return ResponseEntity.ok(residuos);
     }
-    
+
     @GetMapping("/buscarPorId/{id}")
-    public ResponseEntity<List<Residuo>> buscarPorId(Integer id) {
-        List<Residuo> residuos = residuoService.findById(id);
-        if (residuos.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(residuos);
+    public ResponseEntity<Residuo> buscarPorId(@PathVariable Long id) {
+        Optional<Residuo> residuo = residuoService.findById(id);
+        return residuo.map(ResponseEntity::ok)
+                      .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @DeleteMapping("/eliminarPorId/{id}")
-    public ResponseEntity<Void> eliminarPorId(Integer id) {
-        List<Residuo> residuos = residuoService.findById(id);
-        if (residuos.isEmpty()) {
+    public ResponseEntity<Void> eliminarPorId(@PathVariable Long id) {
+        Optional<Residuo> residuo = residuoService.findById(id);
+        if (residuo.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         residuoService.eliminarPorId(id);
@@ -59,12 +60,18 @@ public class ResiduoController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/actualizarResiduos")
-    public ResponseEntity<Void> actualizar(@RequestBody Residuo nuevoResiduo) {
-        if (nuevoResiduo == null) {
-            return ResponseEntity.badRequest().build();
+    @PatchMapping("/actualizarResiduos/{id}")
+    public ResponseEntity<Void> actualizar(@PathVariable Long id, @RequestBody Residuo nuevoResiduo) {
+        Optional<Residuo> existente = residuoService.findById(id);
+        if (existente.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        residuoService.guardar(nuevoResiduo);
+        residuoService.actualizar(id, nuevoResiduo);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public String health() {
+        return "Service is running!";
     }
 }
