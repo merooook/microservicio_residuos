@@ -21,16 +21,9 @@ public interface ResiduoRepository extends JpaRepository<Residuo, Long> {
     @Query("SELECT r FROM Residuo r WHERE r.id = :idBuscar")
     List<Residuo> buscarPorId(Integer idBuscar);
 
-    @Query("SELECT r FROM Residuo WHERE r.tipo= :tipo")
-    List<Residuo> buscarPorTipo(@Param("tipo")String tipo);
-
-    @Query("SELECT r FROM Residuo r WHERE r.peso= :peso")
-    List<Residuo> buscarPorPeso(@Param("peso")Integer peso);
-    
     @Modifying
     @Transactional
     @Query("DELETE FROM Residuo r WHERE r.id = :id")
-
     void eliminarPorId(@Param("id") Integer id);
 
     @Query("UPDATE Residuo r SET r.tipo = :tipo, r.peso = :peso, r.peligrosidad = :peligrosidad, r.empresaEmisora = :empresaEmisora, r.volumen = :volumen, r.clasificacion = :clasificacion WHERE r.id = :id")
@@ -40,6 +33,6 @@ public interface ResiduoRepository extends JpaRepository<Residuo, Long> {
                            @Param("peligrosidad") String peligrosidad, 
                            @Param("empresaEmisora") String empresaEmisora, 
                            @Param("volumen") String volumen, 
-                           @Param("clasificacion") String clasificacion);                     
+                           @Param("clasificacion") String clasificacion);                      
 }
 
