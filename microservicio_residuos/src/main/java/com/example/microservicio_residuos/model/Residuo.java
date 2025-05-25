@@ -20,21 +20,21 @@ public class Residuo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique= false, length= 10, nullable = false)
-    private Integer tipo;
+    @Column(unique= false, length= 10, nullable= false)
+    private String tipo;
 
-    @Column(unique= false, length= 8, nullable = false)
+    @Column(unique= false, length= 8, nullable= false)
     private Integer peso;
 
-    @Column(unique= false, length= 6, nullable = false)
+    @Column(unique= false, length= 6, nullable= false)
     private String peligrosidad;
 
-    @Column(unique= false, length= 20, nullable = false)
+    @Column(unique= false, length= 20, nullable= false)
     private String empresaEmisora;
 
-    @Column(unique= false, length= 8, nullable = false)
+    @Column(unique= false, length= 8, nullable= false)
     private String volumen;
 
-    @Column(unique= false, length= 10, nullable = false)
+    @Column(unique= false, length= 10, nullable= false)
     private String clasificacion;
 }
